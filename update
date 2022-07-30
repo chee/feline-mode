@@ -1,0 +1,2 @@
+#!/bin/sh
+cp ~/.emacs.d/chee/feline.el .
