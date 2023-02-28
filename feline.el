@@ -148,19 +148,22 @@ If there is no match, the fallback is the mode name without the -mode suffix."
 		buffer-id)
 	 'face 'feline-buffer-id-face))
 
+(defmacro feline--fbound-and-p (fn)
+  "Return the result of FN if it is bound, else nil."
+  `(and (fboundp ,fn) (funcall ,fn)))
+
 (defun feline-evil nil
   "Get a feline representation of the evil mode."
   (when (bound-and-true-p evil-local-mode)
 	 (apply 'propertize
 		(cond
-		  ((evil-normal-state-p) '("normal" face feline-evil-normal-face))
-		  ((evil-emacs-state-p) '("emacs" face feline-evil-emacs-face))
-		  ((evil-insert-state-p) '("insert" face feline-evil-insert-face))
-		  ((evil-motion-state-p) '("motion" face feline-evil-motion-face))
-		  ((evil-visual-state-p) '("visual" face feline-evil-visual-face))
-		  ((evil-operator-state-p) '("operator" face feline-evil-operator-face))
-		  ((evil-replace-state-p) '("replace" face feline-evil-replace-face))
-		  (t ("normal" 'face 'feline-evil-normal-face))))))
+		  ((feline--fbound-and-p 'evil-normal-state-p)  '("normal" face feline-evil-normal-face))
+		  ((feline--fbound-and-p 'evil-emacs-state-p)  '("emacs" face feline-evil-emacs-face))
+		  ((feline--fbound-and-p 'evil-insert-state-p)  '("insert" face feline-evil-insert-face))
+		  ((feline--fbound-and-p 'evil-motion-state-p)  '("motion" face feline-evil-motion-face))
+		  ((feline--fbound-and-p 'evil-visual-state-p)  '("visual" face feline-evil-visual-face))
+		  ((feline--fbound-and-p 'evil-operator-state-p)  '("operator" face feline-evil-operator-face))
+		  ((feline--fbound-and-p 'evil-replace-state-p)  '("replace" face feline-evil-replace-face))))))
 
 (defun feline-positions nil
   "Present the line and column in the feline."
