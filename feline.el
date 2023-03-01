@@ -191,19 +191,12 @@ If there is no match, the fallback is the mode name without the -mode suffix."
 
 (defvar feline--project-name-cache '())
 
-(defun feline--last-meaningful-string (list)
-  "Get last meaningful string from LIST."
-  (let* ((n (car list)) (rest (cdr list)) (nn (car rest)))
-	 (if (or (not nn) (string-empty-p nn))
-	   n
-		(feline--last-meaningful-string rest))))
-
 (defun feline--project-name nil
   "Get the current project, if we're in one."
-  (let ((project (project-current)))
-	 (when project
-		(feline--last-meaningful-string
-		  (split-string (project-root project) "/")))))
+  (condition-case nil
+    (when (fboundp 'project-name)
+      (project-name (project-current)))
+    (error nil)))
 
 (defun feline-project-name nil
   "Get a feline representation of the current project name."
