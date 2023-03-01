@@ -1,4 +1,4 @@
-;;; feline.el --- A modeline with very little
+;;; feline.el --- A modeline with very little  -*- lexical-binding: t; -*-
 
 ;; Author: chee <emacs@chee.party>
 ;; Homepage: https://opensource.chee.party/chee/feline-mode
