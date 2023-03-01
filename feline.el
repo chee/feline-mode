@@ -64,37 +64,57 @@
   "The name of the current project in the feline."
   :group 'feline-faces)
 
-(defface feline-evil-face
+(defface feline-evil-state-face
   '((t (:weight bold)))
-  "A face for evil in the feline."
+  "A face for evil states in the feline.
+Every feline evil state indicator state inherits from this."
   :group 'feline-faces)
 
 (defface feline-evil-normal-face
-  '((t (:inherit feline-evil-face
-			:background "#000"
+  '((t (:inherit feline-evil-state-face
+			:background "black"
 			:foreground "white")))
-  "The evil normal feline."
+  "The evil normal state feline indicator."
   :group 'feline-faces)
 
 (defface feline-evil-emacs-face
-  '((t (:inherit feline-evil-face
+  '((t (:inherit feline-evil-state-face
 			:background "#3366ff"
 			:foreground "white")))
-  "The evil Emacs feline."
+  "The evil Emacs state feline indicator."
   :group 'feline-faces)
 
 (defface feline-evil-insert-face
-  '((t (:inherit feline-evil-face
+  '((t (:inherit feline-evil-state-face
 			:background "#3399ff"
 			:foreground "white")))
-  "The evil insert feline."
+  "The evil insert state feline indicator."
+  :group 'feline-faces)
+
+(defface feline-evil-replace-face
+  '((t (:inherit feline-evil-state-face
+			:background "#33ff99"
+			:foreground "black")))
+  "The evil replace state feline indicator."
+  :group 'feline-faces)
+
+(defface feline-evil-operator-face
+  '((t (:inherit feline-evil-state-face
+			:background "pink"
+			:foreground "black")))
+  "The evil operator state feline indicator."
+  :group 'feline-faces)
+
+(defface feline-evil-motion-face
+  '((t (:inherit feline-evil-state-face
+			:background "purple"
+			:foreground "white")))
+  "The evil motion state feline indicator."
   :group 'feline-faces)
 
 (defface feline-evil-visual-face
-  '((t (:inherit feline-evil-face
-			:background "#ffee88"
-			:foreground "#333")))
-  "The evil visual feline."
+  '((t (:inherit (region feline-evil-state-face))))
+  "The evil visual state feline indicator."
   :group 'feline-faces)
 
 (defface feline-position-face
@@ -148,22 +168,11 @@ If there is no match, the fallback is the mode name without the -mode suffix."
 		buffer-id)
 	 'face 'feline-buffer-id-face))
 
-(defmacro feline--fbound-and-p (fn)
-  "Return the result of FN if it is bound, else nil."
-  `(and (fboundp ,fn) (funcall ,fn)))
-
 (defun feline-evil nil
   "Get a feline representation of the evil mode."
-  (when (bound-and-true-p evil-local-mode)
-	 (apply 'propertize
-		(cond
-		  ((feline--fbound-and-p 'evil-normal-state-p)  '("normal" face feline-evil-normal-face))
-		  ((feline--fbound-and-p 'evil-emacs-state-p)  '("emacs" face feline-evil-emacs-face))
-		  ((feline--fbound-and-p 'evil-insert-state-p)  '("insert" face feline-evil-insert-face))
-		  ((feline--fbound-and-p 'evil-motion-state-p)  '("motion" face feline-evil-motion-face))
-		  ((feline--fbound-and-p 'evil-visual-state-p)  '("visual" face feline-evil-visual-face))
-		  ((feline--fbound-and-p 'evil-operator-state-p)  '("operator" face feline-evil-operator-face))
-		  ((feline--fbound-and-p 'evil-replace-state-p)  '("replace" face feline-evil-replace-face))))))
+  (when-let ((state (bound-and-true-p evil-state)))
+	  (propertize (symbol-name state) 'face
+      (intern (format "feline-evil-%s-face" state)))))
 
 (defun feline-positions nil
   "Present the line and column in the feline."
