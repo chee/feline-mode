@@ -2,7 +2,7 @@
 
 ;; Author: chee <emacs@chee.party>
 ;; Homepage: https://opensource.chee.party/chee/feline-mode
-;; Version: 1
+;; Version: 1.1
 ;; Package-Requires: ((emacs "28.1"))
 
 ;;; Commentary:
